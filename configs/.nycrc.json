@@ -1,0 +1,14 @@
+{
+  "all": true,
+  "branches": 100,
+  "check-coverage": true,
+  "exclude": [
+    "lib/**/*.spec.js"
+  ],
+  "functions": 100,
+  "include": [
+    "lib/**/*.js"
+  ],
+  "lines": 100,
+  "statements": 100
+}
