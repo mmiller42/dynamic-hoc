@@ -23,6 +23,9 @@
     "test:unit-source": "ava",
     "test:unit-cjs": "CJS=true ava"
   },
+  "dependencies": {
+    "dynamic-hoc": "^0.1.0"
+  },
   "peerDependencies": {
     "react-redux": ">=7.0.3"
   },
