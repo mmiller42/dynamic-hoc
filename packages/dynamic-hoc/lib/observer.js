@@ -1,26 +1,23 @@
 export const createObserver = initialValue => {
-  let currentValue
-  const listeners = []
+  let currentValue = initialValue
+  let listeners = []
 
-  const observer = {
-    addListener: listener => listeners.push(listener),
-    removeListener: listener =>
-      listeners.splice(listeners.indexOf(listener), 1),
+  return {
+    addListener: listener => {
+      listeners.push(listener)
+    },
+    removeListener: listener => {
+      listeners = listeners.filter(l => l !== listener)
+    },
     get value() {
       return currentValue
     },
     set value(nextValue) {
       if (nextValue !== currentValue) {
-        currentValue =
-          nextValue !== null && typeof nextValue === 'object'
-            ? Object.freeze(nextValue)
-            : nextValue
+        currentValue = nextValue
+
         listeners.forEach(listener => listener(nextValue))
       }
     },
   }
-
-  observer.value = initialValue
-
-  return observer
 }

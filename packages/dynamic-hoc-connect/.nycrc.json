@@ -1,4 +1,0 @@
-{
-  "extends": "../../configs/.nycrc.json",
-  "exclude": ["lib/**/*.spec.app.js"]
-}

@@ -1,11 +1,10 @@
 {
   "branches": 100,
   "check-coverage": true,
+  "exclude": ["lib/**/*.spec.js"],
   "functions": 100,
-  "include": [
-    "lib/**/*.js"
-  ],
+  "include": ["lib/**/*.js"],
   "lines": 100,
-  "reporter": "lcov",
+  "reporter": ["lcov", "text"],
   "statements": 100
 }

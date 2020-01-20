@@ -1,64 +1,149 @@
 # dynamic-hoc
 
-> A utility that wraps a React HOC factory and produces a HOC with an API to mutate the factory's arguments.
+> A utility that wraps a React HOC and produces a HOC with additional methods to swap out the given HOC at runtime.
 
-This module provides the ability to wrap any React HOC factory (such as [`react-redux#connect`](https://react-redux.js.org/api/connect)) to produce a new HOC factory. The factory accepts the same arguments as the given HOC factory, but the resultant HOC function has properties that allow you to change the arguments at runtime and re-render the wrapped component.
+This module provides the ability to wrap any React HOC (such as [`react-redux#connect`](https://react-redux.js.org/api/connect)) to produce a new HOC. The resultant HOC function has properties that allow you to change the HOC at runtime and re-render the wrapped component.
 
-The primary purpose of this function is to provide the ability to write unit tests for React components in isolation from data injected by a HOC, which often requires extensive mocking. While the developer can export both the original component and the wrapped component, this technique does not apply if the component's descendants are wrapped by the HOC. With `createDynamicHoc`, each wrapped component can have its HOC arguments replaced with mock data or functions in the test suite.
+The primary purpose of this function is to provide the ability to write unit tests for React components in isolation from data injected by a HOC, which often requires extensive mocking. While the developer can export both the original component and the wrapped component, this technique does not apply if the component's descendants are wrapped by the HOC. With `dynamicHoc`, each wrapped component can have its HOC replaced with mock data or functions in the test suite.
 
-This module was created specifically for the [`react-redux#connect`](https://react-redux.js.org/api/connect) HOC factory, and the package [`dynamic-hoc-connect`](../dynamic-hoc-connect) provides this factory.
+This module was created specifically for the [`react-redux#connect`](https://react-redux.js.org/api/connect) HOC factory, but should work with any HOC.
+
+## Installation
+
+```sh
+# npm
+npm install dynamic-hoc
+
+# yarn
+yarn add dynamic-hoc
+```
 
 ## Example
 
+### Components
+
 ```jsx
-import { createDynamicHoc } from 'dynamic-hoc'
+import { connect } from 'react-redux'
 import React from 'react'
-import { render } from 'react-dom'
+import { dynamicHoc } from 'dynamic-hoc'
 
-const addFoo = fooValue => Component => props => (
-  <Component foo={fooValue} {...props} />
+const TodoList = ({ todos }) => (
+  <ul>
+    {todos.map(todo => (
+      <li key={todo.id}>
+        <TodoContainer todo={todo} />
+      </li>
+    ))}
+  </ul>
 )
 
-const dynamicAddFoo = createDynamicHoc(addFoo, ['fooValue'])
+export const TodoListContainer = dynamicHoc(
+  connect(
+    state => ({ todos: state.todos }),
+    () => ({}),
+  ),
+)(TodoList)
 
-const Component = dynamicAddFoo('bar')(
-  props => (
-    <div>{props.foo}</div>
+const Todo = ({ creator, onComplete, todo }) => (
+  <div>
+    <span>{todo.text}</span>
+    <span>Created by {creator.name}</span>
+    <button onClick={onComplete}>Complete</button>
+  </div>
+)
+
+export const TodoContainer = dynamicHoc(
+  connect(
+    (state, props) => ({
+      creator: state.users.find(user => user.id === props.todo.creatorId),
+    }),
+    (dispatch, props) => ({
+      onComplete: () =>
+        dispatch({
+          type: 'COMPLETE_TODO',
+          todo: props.todo,
+        }),
+    }),
+  ),
+)(Todo)
+```
+
+### Tests
+
+```jsx
+import React from 'react'
+import { render } from '@testing-library/react'
+import { spy } from 'sinon'
+import test from 'ava'
+import { withProps } from 'dynamic-hoc'
+
+test.afterEach(() => {
+  TodoListContainer.resetHoc()
+  TodoContainer.resetHoc()
+})
+
+test('TodoListContainer', t => {
+  const testTodos = [
+    { creator: '1', id: '42', text: 'foo' },
+    { creator: '2', id: '43', text: 'bar' },
+  ]
+
+  const testCreators = {
+    '1': { id: '1', name: 'Mary' },
+    '2': { id: '2', name: 'Steve' },
+  }
+
+  const onComplete = spy()
+
+  TodoListContainer.replaceHoc(withProps({ todos: testTodos }))
+
+  TodoContainer.replaceHoc(
+    withProps(props => ({
+      creator: testCreators[props.todo.creator],
+      onComplete,
+    })),
   )
-)
 
-render(<Component />, document.querySelector('#root'))
-// <div>bar</div>
+  const { getByText } = render(<TodoListContainer />)
 
-Component.args.foo = 'baz'
+  getByText('foo')
+  getByText('Created by Mary')
+  getByText('bar')
+  getByText('Created by Steve')
+})
 
-// Component re-renders
-// <div>baz</div>
 ```
 
 ## API
 
-### `createDynamicHoc(hocFactory[, argNamesOrArity[, hocName]])`
+### `dynamicHoc(initialHoc): Component => WrappedComponent`
 
-#### Arguments
-
-|Argument|Type|Description|Default value|
-|:---|:---|:---|:---|
-|`hocFactory`|`(...args) => Component => WrappedComponent`|A function which receives arguments and returns a HOC.|*None*|
-|`argNamesOrArity`|`string[]` \| `number`|The names of the arguments to `hocFactory`, or the number of arguments it receives.|`null`|
-|`hocName`|`string`|A display name for the HOC factory. If omitted, it defaults to `hocFactory.name` or `''`.|`null`|
-
-#### Return value
-
-```js
-(...args) => Component => WrappedComponent
-```
-
-Returns a HOC factory which accepts the same arguments as the given `hocFactory`.
-
-This factory returns a HOC which accepts a React component and returns a wrapped component. The wrapped component has two additional properties:
-
-|Property|Type|Description|
+|Argument|Type|Description|
 |:---|:---|:---|
-|`args`|`object` \| `array`|An object with the `hocFactory`'s arguments. Arguments can be reassigned at runtime. If an arity was provided to `createDynamicHoc`, `args` will be an array and arguments can be assigned by index. If neither argument names nor arity is provided, `args` can be reassigned to a new array.|
-|`restoreArgs`|`() => void`|A function which will restore the originally provided arguments to the HOC.|
+|`hoc`|`Component => WrappedComponent`|Any higher order component factory.|
+
+The returned wrapped component has additional methods:
+
+#### `WrappedComponent.replaceHoc(hoc): void`
+
+Replaces the current HOC, triggering any component instances to re-render.
+
+|Argument|Type|Description|
+|:---|:---|:---|
+|`hoc`|`Component => WrappedComponent`|Any higher order component factory.|
+
+#### `WrappedComponent.resetHoc(): void`
+
+Replaces the current HOC with `initialHoc`, triggering any component instances to re-render.
+
+### `withProps(props): Component => WrappedComponent`
+
+A helper HOC to pass any props to a component. Useful HOC to replace with in tests.
+
+|Argument|Type|Description|
+|:---|:---|:---|
+|`props`|`object` \| `props => object`|A set of props to forward to the component; or, a function which receives the props passed to the component and returns a set of props to forward to the component.|
+
+## License
+
+[MIT](./LICENSE)

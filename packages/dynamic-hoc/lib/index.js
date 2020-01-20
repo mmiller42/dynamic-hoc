@@ -1,4 +1,5 @@
-import { createDynamicHoc } from './dynamicHoc.js'
+import { dynamicHoc } from './dynamicHoc.js'
+import { withProps } from './withProps.js'
 
-export { createDynamicHoc }
-export default createDynamicHoc
+export { dynamicHoc, withProps }
+export default dynamicHoc
