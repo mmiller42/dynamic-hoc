@@ -73,7 +73,6 @@ export const TodoContainer = dynamicHoc(
 ```jsx
 import React from 'react'
 import { render } from '@testing-library/react'
-import { spy } from 'sinon'
 import test from 'ava'
 import { withProps } from 'dynamic-hoc'
 
@@ -93,14 +92,12 @@ test('TodoListContainer', t => {
     '2': { id: '2', name: 'Steve' },
   }
 
-  const onComplete = spy()
-
   TodoListContainer.replaceHoc(withProps({ todos: testTodos }))
 
   TodoContainer.replaceHoc(
     withProps(props => ({
       creator: testCreators[props.todo.creator],
-      onComplete,
+      onComplete: () => {},
     })),
   )
 

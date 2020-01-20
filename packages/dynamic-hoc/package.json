@@ -1,6 +1,6 @@
 {
   "name": "dynamic-hoc",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "A utility that wraps a React HOC and produces a HOC with additional methods to swap out the given HOC at runtime.",
   "keywords": [
     "hoc",
