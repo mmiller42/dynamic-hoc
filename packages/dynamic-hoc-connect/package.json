@@ -1,6 +1,6 @@
 {
   "name": "dynamic-hoc-connect",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "A wrapper for react-redux connect HOC that allows mutation of its arguments.",
   "main": "cjs/index.js",
   "module": "lib/index.js",
