@@ -1,8 +1,7 @@
-const rootPattern = process.env.WITH_CJS === 'true' ? '{cjs,lib}' : 'lib'
+const rootPattern = process.env.CJS === 'true' ? 'cjs' : 'lib'
 
-export default {
+module.exports = {
   files: [`${rootPattern}/**/*.spec.js`],
   require: ['esm'],
-  sources: [`${rootPattern}/**/*.js`],
   verbose: true,
 }

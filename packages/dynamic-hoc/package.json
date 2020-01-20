@@ -4,24 +4,40 @@
   "description": "A utility that wraps a React HOC factory and produces a HOC with an API to mutate the factory's arguments.",
   "main": "cjs/index.js",
   "module": "lib/index.js",
-  "types": "lib/index.d.ts",
+  "files": [
+    "/cjs",
+    "/lib"
+  ],
   "repository": "https://github.com/mmiller42/dynamic-hoc.git",
   "author": "mmiller42 <me@mmiller.me>",
   "license": "MIT",
   "scripts": {
-    "build": "yarn build:cjs && yarn build:format",
-    "build:cjs": "rimraf cjs && babel 'lib/**/*.js' --out-dir cjs",
-    "build:format": "prettier --write '*.{js,json}' '{cjs,lib}/**/*.{js,ts}'",
-    "test": "yarn test:format && WITH_CJS=true yarn test:coverage",
-    "test:coverage": "nyc yarn test:unit",
-    "test:format": "prettier --check '*.js' '{cjs,lib}/**/*.js'",
-    "test:unit": "ava"
+    "build": "rimraf cjs && babel 'lib/**/*.js' --out-dir cjs && yarn format-cjs",
+    "coverage-report": "open coverage/lcov-report/index.html",
+    "format-cjs": "prettier --write 'cjs/**/*.js' && prettier --write 'cjs/**/*.js'",
+    "format-source": "prettier --write '*.{js,json}' 'lib/**/*.js'",
+    "ci": "yarn build && yarn test",
+    "test": "yarn test:format && yarn test:coverage && yarn test:unit-cjs",
+    "test:coverage": "nyc yarn test:unit-source",
+    "test:format": "prettier --check '*.{js,json}' '{cjs,lib}/**/*.js'",
+    "test:unit-source": "ava",
+    "test:unit-cjs": "CJS=true ava"
   },
   "peerDependencies": {
     "react": ">=16.8.0"
   },
   "devDependencies": {
+    "@babel/cli": "^7.8.3",
+    "@babel/core": "^7.8.3",
+    "@babel/plugin-transform-modules-commonjs": "^7.8.3",
+    "ava": "^3.0.0",
+    "esm": "^3.2.25",
+    "nyc": "^15.0.0",
+    "open": "^7.0.0",
+    "prettier": "^1.19.1",
     "react": ">=16.8.0",
-    "react-test-renderer": "^16.12.0"
+    "react-test-renderer": "^16.12.0",
+    "rimraf": "^3.0.0",
+    "sinon": "^8.1.0"
   }
 }

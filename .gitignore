@@ -1,7 +1,7 @@
 *.log
 .DS_Store
-.nyc_output
 .vscode
-coverage
 node_modules
+/packages/*/.nyc_output
 /packages/*/cjs
+/packages/*/coverage

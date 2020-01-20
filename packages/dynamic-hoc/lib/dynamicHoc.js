@@ -6,7 +6,7 @@ import { getArgNames } from './argNames.js'
 export const createDynamicHoc = (
   hocFactory,
   argNamesOrArity = null,
-  hocName = '',
+  hocName = null,
 ) => (...initialArgs) => {
   const argNames = argNamesOrArity ? getArgNames(argNamesOrArity) : null
 
