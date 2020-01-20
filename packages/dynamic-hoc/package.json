@@ -9,6 +9,7 @@
     "/lib"
   ],
   "repository": "https://github.com/mmiller42/dynamic-hoc.git",
+  "homepage": "https://github.com/mmiller42/dynamic-hoc/tree/master/packages/dynamic-hoc",
   "author": "mmiller42 <me@mmiller.me>",
   "license": "MIT",
   "scripts": {
