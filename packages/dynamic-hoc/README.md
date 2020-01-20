@@ -6,7 +6,7 @@ This module provides the ability to wrap any React HOC (such as [`react-redux#co
 
 The primary purpose of this function is to provide the ability to write unit tests for React components in isolation from data injected by a HOC, which often requires extensive mocking. While the developer can export both the original component and the wrapped component, this technique does not apply if the component's descendants are wrapped by the HOC. With `dynamicHoc`, each wrapped component can have its HOC replaced with mock data or functions in the test suite.
 
-This module was created specifically for the [`react-redux#connect`](https://react-redux.js.org/api/connect) HOC factory, but should work with any HOC.
+This module was created specifically for the [`react-redux#connect`](https://react-redux.js.org/api/connect) HOC factory, but should work with any HOC. The intention was to test React components as units without the store and export and test `mapStateToProps` and `mapDispatchToProps` to test as their own units, in combination with selector composition techniques like [`reselect`](https://github.com/reduxjs/reselect).
 
 ## Installation
 
@@ -132,6 +132,8 @@ Replaces the current HOC, triggering any component instances to re-render.
 #### `WrappedComponent.resetHoc(): void`
 
 Replaces the current HOC with `initialHoc`, triggering any component instances to re-render.
+
+---
 
 ### `withProps(props): Component => WrappedComponent`
 
