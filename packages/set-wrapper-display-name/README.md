@@ -85,4 +85,4 @@ Wrapper.name
 
 ## License
 
-[MIT](./LICENSE)
+[MIT](../../LICENSE)

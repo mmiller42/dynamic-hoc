@@ -152,4 +152,4 @@ MyConnectedComponent.resetHoc()
 
 ## License
 
-[MIT](./LICENSE)
+[MIT](../../LICENSE)

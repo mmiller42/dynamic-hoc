@@ -21,7 +21,7 @@ import React from 'react'
 const Message = ({ className, text }) => (
   <div className={className}>
     {text}
-  </ul>
+  </div>
 )
 
 const ErrorMessage = injectProps({
@@ -68,6 +68,7 @@ const MyConnectedComponent = injectProps(
   props => ({ foo: props.x + props.y }),
 )(MyComponent)
 
+<MyConnectedComponent x={1} y={2} />
 // → <MyComponent x={1} y={2} foo={3} />
 ```
 
@@ -77,9 +78,10 @@ const MyConnectedComponent = injectProps(
   (injectedProps, ownProps) => injectedProps,
 )(MyComponent)
 
+<MyConnectedComponent x={1} y={2} />
 // → <MyComponent foo={3} />
 ```
 
 ## License
 
-[MIT](./LICENSE)
+[MIT](../../LICENSE)

@@ -10,6 +10,6 @@ This is a monorepository. See documentaion for each module:
 
 > A helper React HOC to pass any props to a component.
 
-## [`set-wrapper-display-name](./packages/set-wrapper-display-name)
+## [`set-wrapper-display-name`](./packages/set-wrapper-display-name)
 
 > A utility to set the name and display name of a HOC-wrapped component.
