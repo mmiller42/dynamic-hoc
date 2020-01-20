@@ -30,11 +30,11 @@ export const TodoListContainer = dynamicConnect(
 )(TodoList)
 
 const Todo = ({ creator, onComplete, todo }) => (
-  <>
+  <div>
     <span>{todo.text}</span>
     <span>Created by {creator.name}</span>
     <button onClick={onComplete}>Complete</button>
-  </>
+  </div>
 )
 
 export const TodoContainer = dynamicConnect(
