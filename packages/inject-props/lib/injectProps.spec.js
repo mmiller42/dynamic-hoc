@@ -2,7 +2,7 @@ import { act, create as createTestRenderer } from 'react-test-renderer'
 import { createElement } from 'react'
 import { stub } from 'sinon'
 import test from 'ava'
-import { withProps } from './withProps.js'
+import { injectProps } from './injectProps.js'
 
 const render = (t, Component, props) => {
   let testInstance
@@ -31,7 +31,7 @@ test.afterEach(t => {
 const Component = () => null
 
 test('adds the props to the component', t => {
-  const Wrapper = withProps({ a: 1 })(Component)
+  const Wrapper = injectProps({ a: 1 })(Component)
   const testInstance = render(t, Wrapper, { b: 2 })
 
   t.deepEqual(getWrappedElement(testInstance).props, { a: 1, b: 2 })
@@ -39,7 +39,7 @@ test('adds the props to the component', t => {
 
 test('if given a function, invokes with the given props', t => {
   const getProps = stub().callsFake(props => ({ a: props.b + 1 }))
-  const Wrapper = withProps(getProps)(Component)
+  const Wrapper = injectProps(getProps)(Component)
   const testInstance = render(t, Wrapper, { b: 2 })
 
   t.true(getProps.called)
@@ -48,10 +48,21 @@ test('if given a function, invokes with the given props', t => {
   t.deepEqual(getWrappedElement(testInstance).props, { a: 3, b: 2 })
 })
 
-test('sets the name and displayName of the wrapper', t => {
-  const Wrapper = withProps({ a: 1 })(Component)
+test('uses custom mergeProps', t => {
+  const Wrapper = injectProps(
+    { a: 1 },
+    injectedProps => injectedProps,
+  )(Component)
 
-  const displayName = 'withProps(Component)'
+  const testInstance = render(t, Wrapper, { b: 2 })
+
+  t.deepEqual(getWrappedElement(testInstance).props, { a: 1 })
+})
+
+test('sets the name and displayName of the wrapper', t => {
+  const Wrapper = injectProps({ a: 1 })(Component)
+
+  const displayName = 'injectProps(Component)'
   t.is(Wrapper.name, displayName)
   t.is(Wrapper.displayName, displayName)
 })

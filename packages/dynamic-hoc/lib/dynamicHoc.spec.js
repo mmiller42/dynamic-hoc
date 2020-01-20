@@ -2,7 +2,7 @@ import { act, create as createTestRenderer } from 'react-test-renderer'
 import { createElement } from 'react'
 import test from 'ava'
 import { dynamicHoc } from './dynamicHoc.js'
-import { withProps } from './withProps.js'
+import { injectProps } from 'inject-props'
 
 const render = (t, Component, props) => {
   let testInstance
@@ -31,29 +31,29 @@ test.afterEach(t => {
 const Component = () => null
 
 test('renders with the original HOC', t => {
-  const Wrapper = dynamicHoc(withProps({ a: 1 }))(Component)
+  const Wrapper = dynamicHoc(injectProps({ a: 1 }))(Component)
   const testInstance = render(t, Wrapper, { b: 2 })
 
   t.deepEqual(getWrappedElement(testInstance).props, { a: 1, b: 2 })
 })
 
 test('re-renders when the HOC is changed', t => {
-  const Wrapper = dynamicHoc(withProps({ a: 1 }))(Component)
+  const Wrapper = dynamicHoc(injectProps({ a: 1 }))(Component)
   const testInstance = render(t, Wrapper, { b: 2 })
 
   act(() => {
-    Wrapper.replaceHoc(withProps({ a: 2 }))
+    Wrapper.replaceHoc(injectProps({ a: 2 }))
   })
 
   t.deepEqual(getWrappedElement(testInstance).props, { a: 2, b: 2 })
 })
 
 test('resets the original HOC', t => {
-  const Wrapper = dynamicHoc(withProps({ a: 1 }))(Component)
+  const Wrapper = dynamicHoc(injectProps({ a: 1 }))(Component)
   const testInstance = render(t, Wrapper, { b: 2 })
 
   act(() => {
-    Wrapper.replaceHoc(withProps({ a: 2 }))
+    Wrapper.replaceHoc(injectProps({ a: 2 }))
   })
 
   act(() => {
@@ -64,7 +64,7 @@ test('resets the original HOC', t => {
 })
 
 test('sets the name and displayName of the wrapper', t => {
-  const Wrapper = dynamicHoc(withProps({ a: 1 }))(Component)
+  const Wrapper = dynamicHoc(injectProps({ a: 1 }))(Component)
 
   const displayName = 'dynamicHoc()(Component)'
   t.is(Wrapper.name, displayName)
@@ -72,7 +72,7 @@ test('sets the name and displayName of the wrapper', t => {
 })
 
 test('does not affect more than one wrapped component', t => {
-  const hoc = withProps({ a: 1 })
+  const hoc = injectProps({ a: 1 })
 
   const Wrapper1 = dynamicHoc(hoc)(Component)
   const Wrapper2 = dynamicHoc(hoc)(Component)
@@ -81,7 +81,7 @@ test('does not affect more than one wrapped component', t => {
   const testInstance2 = render(t, Wrapper2, { b: 3 })
 
   act(() => {
-    Wrapper1.replaceHoc(withProps({ a: 2 }))
+    Wrapper1.replaceHoc(injectProps({ a: 2 }))
   })
 
   t.deepEqual(getWrappedElement(testInstance1).props, { a: 2, b: 2 })

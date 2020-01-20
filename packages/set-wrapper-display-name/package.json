@@ -1,13 +1,12 @@
 {
-  "name": "dynamic-hoc",
+  "name": "set-wrapper-display-name",
   "version": "1.0.0",
-  "description": "A utility that wraps a React HOC and produces a HOC with additional methods to swap out the given HOC at runtime.",
+  "description": "A utility to set the name and display name of a HOC-wrapped component.",
   "keywords": [
+    "displayName",
+    "dynamic-hoc",
     "hoc",
-    "react",
-    "react-redux",
-    "redux",
-    "testing"
+    "react"
   ],
   "main": "cjs/index.js",
   "module": "lib/index.js",
@@ -16,7 +15,7 @@
     "/lib"
   ],
   "repository": "https://github.com/mmiller42/dynamic-hoc.git",
-  "homepage": "https://github.com/mmiller42/dynamic-hoc/tree/master/packages/dynamic-hoc",
+  "homepage": "https://github.com/mmiller42/dynamic-hoc/tree/master/packages/set-wrapper-display-name",
   "author": "mmiller42 <me@mmiller.me>",
   "license": "MIT",
   "scripts": {
@@ -33,9 +32,6 @@
   "dependencies": {
     "set-wrapper-display-name": "^1.0.0"
   },
-  "peerDependencies": {
-    "react": ">=16.8.0"
-  },
   "devDependencies": {
     "@babel/cli": "^7.8.3",
     "@babel/core": "^7.8.3",
@@ -43,12 +39,9 @@
     "ava": "^3.0.0",
     "cross-env": "^6.0.3",
     "esm": "^3.2.25",
-    "inject-props": "^1.0.0",
     "nyc": "^15.0.0",
     "open": "^7.0.0",
     "prettier": "^1.19.1",
-    "react": ">=16.8.0",
-    "react-test-renderer": "^16.12.0",
     "rimraf": "^3.0.0",
     "sinon": "^8.1.0"
   }

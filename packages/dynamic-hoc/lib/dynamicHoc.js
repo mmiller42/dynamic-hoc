@@ -1,6 +1,6 @@
 import { createElement, useEffect, useMemo, useState } from 'react'
 import { createObserver } from './observer.js'
-import { createSetWrapperDisplayName } from './displayName.js'
+import { createSetWrapperDisplayName } from 'set-wrapper-display-name'
 
 const setWrapperDisplayName = createSetWrapperDisplayName('dynamicHoc()')
 
