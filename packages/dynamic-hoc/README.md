@@ -15,14 +15,11 @@ import { createDynamicHoc } from 'dynamic-hoc'
 import React from 'react'
 import { render } from 'react-dom'
 
-const addFoo = fooValue =>
-  Component =>
-    props =>
-      <Component foo={fooValue} {...props} />
+const addFoo = fooValue => Component => props => (
+  <Component foo={fooValue} {...props} />
+)
 
-const dynamicAddFoo = createDynamicHoc(addFoo, [
-  'fooValue',
-])
+const dynamicAddFoo = createDynamicHoc(addFoo, ['fooValue'])
 
 const Component = dynamicAddFoo('bar')(
   props => (
@@ -30,9 +27,7 @@ const Component = dynamicAddFoo('bar')(
   )
 )
 
-render(
-  <Component />
-)
+render(<Component />, document.querySelector('#root'))
 // <div>bar</div>
 
 Component.args.foo = 'baz'
@@ -43,7 +38,7 @@ Component.args.foo = 'baz'
 
 ## API
 
-### `createtDynamicHoc(hocFactory[, argNamesOrArity[, hocName]])`
+### `createDynamicHoc(hocFactory[, argNamesOrArity[, hocName]])`
 
 #### Arguments
 
