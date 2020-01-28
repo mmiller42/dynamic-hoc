@@ -2,7 +2,8 @@ import { createElement, useEffect, useMemo, useState } from 'react'
 import { createObserver } from './observer.js'
 import { createSetWrapperDisplayName } from 'set-wrapper-display-name'
 
-const setWrapperDisplayName = createSetWrapperDisplayName('dynamicHoc()')
+const setWrapperDisplayName = hoc =>
+  createSetWrapperDisplayName(`dynamicHoc(${hoc.name || ''})`)
 
 export const dynamicHoc = initialHoc => Component => {
   const hocObserver = createObserver(initialHoc)
@@ -29,7 +30,8 @@ export const dynamicHoc = initialHoc => Component => {
 
   Wrapper.resetHoc = () => Wrapper.replaceHoc(initialHoc)
 
-  setWrapperDisplayName(Wrapper, Component)
+  setWrapperDisplayName(initialHoc)(Wrapper, Component)
+  hocObserver.addListener(hoc => setWrapperDisplayName(hoc)(Wrapper, Component))
 
   return Wrapper
 }

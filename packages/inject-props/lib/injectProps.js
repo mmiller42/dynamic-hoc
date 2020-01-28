@@ -11,15 +11,19 @@ const defaultMergeProps = (injectedProps, ownProps) => ({
 export const injectProps = (props, mergeProps = defaultMergeProps) => {
   const getProps = typeof props === 'function' ? props : () => props
 
-  return Component => {
-    const Wrapper = componentProps =>
-      createElement(
-        Component,
-        mergeProps(getProps(componentProps), componentProps),
-      )
+  return Object.defineProperty(
+    Component => {
+      const Wrapper = componentProps =>
+        createElement(
+          Component,
+          mergeProps(getProps(componentProps), componentProps),
+        )
 
-    setWrapperDisplayName(Wrapper, Component)
+      setWrapperDisplayName(Wrapper, Component)
 
-    return Wrapper
-  }
+      return Wrapper
+    },
+    'name',
+    { value: 'injectProps' },
+  )
 }

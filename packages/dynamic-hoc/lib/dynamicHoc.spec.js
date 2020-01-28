@@ -66,7 +66,32 @@ test('resets the original HOC', t => {
 test('sets the name and displayName of the wrapper', t => {
   const Wrapper = dynamicHoc(injectProps({ a: 1 }))(Component)
 
+  const displayName = 'dynamicHoc(injectProps)(Component)'
+  t.is(Wrapper.name, displayName)
+  t.is(Wrapper.displayName, displayName)
+})
+
+test('sets the name and displayName of the wrapper if HOC is nameless', t => {
+  const hoc = Object.defineProperty(Component => () => null, 'name', {
+    value: null,
+  })
+  const Wrapper = dynamicHoc(hoc)(Component)
+
   const displayName = 'dynamicHoc()(Component)'
+  t.is(Wrapper.name, displayName)
+  t.is(Wrapper.displayName, displayName)
+})
+
+test('changes the name and displayName of the wrapper when HOC is replaced', t => {
+  const Wrapper = dynamicHoc(injectProps({ a: 1 }))(Component)
+  const testInstance = render(t, Wrapper, { b: 2 })
+
+  const hoc = Object.defineProperty(Component => () => null, 'name', {
+    value: 'foo',
+  })
+  Wrapper.replaceHoc(hoc)
+
+  const displayName = 'dynamicHoc(foo)(Component)'
   t.is(Wrapper.name, displayName)
   t.is(Wrapper.displayName, displayName)
 })

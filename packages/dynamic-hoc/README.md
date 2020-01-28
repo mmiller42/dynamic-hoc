@@ -83,7 +83,7 @@ test.afterEach(() => {
   TodoContainer.resetHoc()
 })
 
-test('TodoListContainer', t => {
+test('TodoListContainer', () => {
   const testTodos = [
     { creator: '1', id: '42', text: 'foo' },
     { creator: '2', id: '43', text: 'bar' },
