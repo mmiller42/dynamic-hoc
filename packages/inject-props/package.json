@@ -29,6 +29,9 @@
     "test:unit-source": "ava",
     "test:unit-cjs": "cross-env CJS=true ava"
   },
+  "dependencies": {
+    "set-wrapper-display-name": "^1.0.0"
+  },
   "peerDependencies": {
     "react": ">=0.3.0"
   },
