@@ -31,7 +31,7 @@
     "test:unit-cjs": "cross-env CJS=true ava"
   },
   "dependencies": {
-    "set-wrapper-display-name": "^1.0.0"
+    "set-wrapper-display-name": "^1.0.1"
   },
   "peerDependencies": {
     "react": ">=16.8.0"
