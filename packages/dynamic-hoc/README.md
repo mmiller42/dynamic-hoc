@@ -118,7 +118,7 @@ test('TodoListContainer', () => {
 
 |Argument|Type|Description|
 |:---|:---|:---|
-|`hoc`|`Component => WrapperComponent`|Any higher order component factory.|
+|`initialHoc`|`Component => WrapperComponent`|Any higher order component factory.|
 |`Component`|`ReactComponent`|The component to wrap.|
 
 The returned wrapper component has additional methods:
