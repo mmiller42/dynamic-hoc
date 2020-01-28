@@ -34,7 +34,7 @@ const withFoo = Component => {
 const Message = ({ foo, text }) => (
   <div>
     {foo}: {text}
-  </ul>
+  </div>
 )
 
 const MessageWithFoo = withFoo(Message)

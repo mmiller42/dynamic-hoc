@@ -24,9 +24,7 @@ const Message = ({ className, text }) => (
   </div>
 )
 
-const ErrorMessage = injectProps({
-  className: 'errorMessage',
-})(Message)
+const ErrorMessage = injectProps({ className: 'errorMessage' })(Message)
 
 <ErrorMessage text="Error!" />
 // → <MyComponent className="errorMessage" text="Error!" />
@@ -53,7 +51,7 @@ A helper HOC to pass any props to a component.
 |Argument|Type|Description|
 |:---|:---|:---|
 |`props`|`object` \| `props => object`|A set of props to forward to the component; or, a function which receives the props passed to the component and returns a set of props to forward to the component.|
-|`mergeProps`|`(injectedProps, ownProps) => object`|A function used to merge the props provided by the HOC with the props passed to the wrapped component. Defaults to `{ ...ownProps, ...injectedProps }`.|
+|`mergeProps`|`(injectedProps, ownProps) => object`|A function used to merge the props provided by the HOC with the props passed to the wrapped component. Defaults to `(injectedProps, ownProps) => ({ ...ownProps, ...injectedProps })`.|
 |`Component`|`ReactComponent`|The component to wrap.|
 
 ```jsx
