@@ -1,6 +1,6 @@
 {
   "name": "inject-props",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "A helper React HOC to pass any props to a component.",
   "keywords": [
     "dynamic-hoc",
