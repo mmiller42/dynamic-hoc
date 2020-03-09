@@ -48,6 +48,15 @@ test('re-renders when the HOC is changed', t => {
   t.deepEqual(getWrappedElement(testInstance).props, { a: 2, b: 2 })
 })
 
+test('renders with the replaced HOC before initial render', t => {
+  const Wrapper = dynamicHoc(injectProps({ a: 1 }))(Component)
+  Wrapper.replaceHoc(injectProps({ a: 2 }))
+
+  const testInstance = render(t, Wrapper, { b: 2 })
+
+  t.deepEqual(getWrappedElement(testInstance).props, { a: 2, b: 2 })
+})
+
 test('resets the original HOC', t => {
   const Wrapper = dynamicHoc(injectProps({ a: 1 }))(Component)
   const testInstance = render(t, Wrapper, { b: 2 })
