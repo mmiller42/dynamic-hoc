@@ -154,7 +154,22 @@ MyConnectedComponent.resetHoc()
 
 ### What if I don't want to add a test dependency to my production app?
 
-You could export a version of the HOC that only loads `dynamic-hoc` when in your test environment.
+You could use a test library like [Jest](https://jestjs.io/) to mock the HOC module.
+
+```js
+jest.mock('react-redux', () => {
+  const { dynamicHoc } = require('dynamic-hoc')
+  const reactRedux = jest.requireActual('react-redux')
+
+  return {
+    ...reactRedux,
+    connect: (mapStateToProps, mapDispatchToProps, mergeProps, options) =>
+      dynamicHoc(reactRedux.connect(mapStateToProps, mapDispatchToProps, mergeProps, options)),
+  }
+})
+```
+
+Or you could make a shared utility export either the original HOC module or the dynamic version depending on your environment.
 
 ```js
 import { connect as reduxConnect } from 'react-redux'
@@ -163,31 +178,10 @@ export let connect = reduxConnect
 
 if (process.env.NODE_ENV === 'test') {
   const { dynamicHoc } = require('dynamic-hoc')
-  
+
   connect = (mapStateToProps, mapDispatchToProps, mergeProps, options) =>
     dynamicHoc(reduxConnect(mapStateToProps, mapDispatchToProps, mergeProps, options))
 }
-```
-
-Or you could use a test library to mock the dependency.
-
-```js
-jest.mock('react-redux', () => {
-  const { dynamicHoc } = require('dynamic-hoc')
-  const reactRedux = jest.requireActual('react-redux')
-  
-  const mock = {
-    ...reactRedux,
-    connect: (mapStateToProps, mapDispatchToProps, mergeProps, options) =>
-      dynamicHoc(reactRedux.connect(mapStateToProps, mapDispatchToProps, mergeProps, options)),
-  }
-  
-  return {
-    __esModule: true,
-    default: reactRedux,
-    ...reactRedux,
-  }
-})
 ```
 
 ## License
